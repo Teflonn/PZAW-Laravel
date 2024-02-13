@@ -2,12 +2,16 @@
 
 @section('content')
     <div class="bg-[#5a5c4d] dark:bg-[] w-1/3 mx-auto whitespace-normal h-max p-4 rounded-md">
-    <a href="{{ route('publications.edit', ['publication' => $publication->id]) }}">Edytuj</a>
+        @auth
+        @if(auth()->user()->id == $publication->author_id)
+    <a href="{{ route('publications.edit', ['publication' => $publication->id]) }}" >Edytuj</a>
     <form action="{{ route('publications.destroy', ['publication' => $publication->id]) }}" method="POST">
     @csrf
     @method('DELETE')
     <button type="submit">Usuń</button>
+    @endif
 </form>
+@endauth
     <p class="text-3xl font-bold"> {{ $publication->title }}</p>
     <p>{{ $publication->content }}</p>
     <p>Autor: <p>

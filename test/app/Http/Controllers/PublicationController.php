@@ -11,6 +11,10 @@ use App\Http\Requests\UpdatePublicationRequest;
 
 class PublicationController extends Controller
 {
+
+
+ 
+
     public function index()
     {
         $publication = Publication::all();
@@ -50,18 +54,24 @@ class PublicationController extends Controller
         return view('form', ['users' => $users]);
 
     }
+   /* public function __construct()
+    {
+        $this->authorizeResource(Publication::class, 'publication');
+    }*/
 
     public function edit(Publication $publication){
         $users = User::all();
-        
+        $this->authorize('update', $publication);
+
         return view('form',['publication' =>$publication, 'users' => $users] );
 
     }
 
     public function update(UpdatePublicationRequest $request, Publication $publication)
     {
-        //$this->authorize('update', $publication);
-    
+        
+        $this->authorize('update', $publication);
+
         $users = User::all();
         $data = $request->validated();
         
@@ -89,6 +99,7 @@ class PublicationController extends Controller
     }
 
     public function destroy(Publication $publication){
+        $this->authorize('update', $publication);
 
         Comment::where('publication_id', $publication->id)->delete();
         $publication->delete();

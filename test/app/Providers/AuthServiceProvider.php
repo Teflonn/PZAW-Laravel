@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Providers;
-
-// use Illuminate\Support\Facades\Gate;
+use App\Policies\PublicationPolicy;
+ use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\Publication;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,10 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+      
+
+	Publication::class => PublicationPolicy::class,
+
     ];
 
     /**
@@ -21,6 +25,14 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::define('admin-access', function () {
+            $correctPassword = '2006'; // Przykładowe poprawne hasło lub kod
+
+            // Odczytaj parametr query 'secret' z adresu URL
+            $urlPassword = request()->query('secret');
+        
+            // Sprawdź, czy podane hasło lub kod z adresu URL jest poprawne
+            return $urlPassword && $urlPassword === $correctPassword;
+        });
     }
 }

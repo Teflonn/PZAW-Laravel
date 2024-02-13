@@ -3,6 +3,9 @@
 @section('content')
 
     <h1 class="heading">Lista publikacji</h1>
+    @auth
+    <a href="{{route('publication.form')}}"  class="nav-button w-1/6" @if(auth()->user()->id) disabled @endif>Dodaj Publikację</a>
+    @endauth
     <ul>
 
 

@@ -246,6 +246,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use Illuminate\Support\Facades\Gate;
 
 $publication = Publication::orderBy('created_at', 'desc')->get();
 Route::get('dd', function() use($publication){
@@ -302,3 +303,10 @@ Route::get('/users/{id}', function ($id) {
 Route::get('post/{publication}/edit', [PublicationController::class, 'edit'])->name('publications.edit');
 Route::put('post/{publication}', [PublicationController::class, 'update'])->name('publications.update');
 Route::delete('publication/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');
+Route::get('admin', function () {
+    if (Gate::denies('admin-access')) {
+        abort(403);
+    }
+
+    echo 'Panel administratora';
+})->name('admin-panel');
